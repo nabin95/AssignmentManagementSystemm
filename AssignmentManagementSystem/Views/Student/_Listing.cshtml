@@ -1,0 +1,93 @@
+﻿@model AssignmentManagementSystem.Models.StudentListingModel
+
+@if (Model != null && Model.Students != null && Model.Students.Count() > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">StudentName</th>
+                <th scope="col">Email</th>
+                <th scope="col">Address</th>
+                <th scope="col">ContactNumber</th>
+                <th scope="col">DepartmentName</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in Model.Students)
+            {
+            <tr>
+                <td>
+                    @student.StudentName
+                </td>
+                <td>
+                    @student.Email
+                </td>
+                <td>
+                    @student.Address
+                </td>
+                <td>
+                    @student.ContactNumber
+                </td>
+                <td>
+                    @if (student.DepartmentModel != null)
+                    {
+                        @student.DepartmentModel.DepartmentName
+                    }
+
+                </td>
+                <td>
+                    <button data-href="@Url.Action("Create","Student", new { ID = student.StudentId})" type="button" class="data-btn btn btn-primary" data-toggle="modal" data-target="#actionModal">Edit</button>
+                    <button data-href="@Url.Action("Delete","Student", new { ID = student.StudentId})" type="button" class="data-btn btn btn-danger" data-toggle="modal" data-target="#actionModal">Delete</button>
+                </td>
+
+            </tr>
+            }
+        </tbody>
+    </table>
+
+    if (Model.Pager.EndPage > 1)
+    {
+        <nav>
+            <ul class="pagination">
+                @if (Model.Pager.CurrentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index","Student")">
+                            First
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index","Student",new { page =Model.Pager.CurrentPage - 1 })">Previous</a>
+                    </li>
+                }
+
+                @for (var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
+                {
+                    <li class="page-item @(page == Model.Pager.CurrentPage ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("Index","Student",new { page =page})">@page</a>
+                    </li>
+                }
+
+                @if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index","Student",new { page =Model.Pager.CurrentPage + 1})">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index","Student",new { page =Model.Pager.TotalPages})">Last</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+}
+else
+{
+    <div class="alert alert-warning" role="alert">
+        Sorry! No Record exist..
+    </div>
+}
+
+
+

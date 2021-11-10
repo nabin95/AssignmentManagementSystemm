@@ -1,0 +1,56 @@
+﻿
+@model AssignmentManagementSystem.Models.TeacherListingModel
+
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col col-lg-12">
+
+        <h2>Teacher</h2>
+        <hr />
+    </div>
+</div>
+<div class="row mb-3">
+    <div class="col col-lg-6">
+        <form>
+            <div class="input-group">
+                <input type="text" name="searchterm" class="form-control" value="@Model.SearchTerm" placeholder="Search">
+                <button class="btn btn-outline-primary" type="submit">Search</button>
+                @*<a class="btn btn-outline-secondary" href="@Url.Action("Index","Faculty")">Reset</a>*@
+                <button data-href="@Url.Action("Create","Teacher")" class="data-btn btn btn-outline-success" type="button" data-toggle="modal" data-target="#actionModal">Create</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col col-lg-12">
+        @{ Html.RenderPartial("_Listing", Model);}
+    </div>
+</div>
+<!-- Button trigger modal -->
+<!-- Modal -->
+<div class="modal fade" id="actionModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="dialog">
+
+    </div>
+</div>
+
+
+<script>
+    $(".data-btn").click(function () {
+        debugger;
+        $.ajax({
+            url: $(this).attr("data-href"),
+        }).done(function (response) {
+            $("#actionModal .modal-dialog").html(response);
+        });
+    });
+</script>
+
+
+
+

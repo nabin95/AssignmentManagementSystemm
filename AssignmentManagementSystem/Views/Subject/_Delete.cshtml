@@ -1,0 +1,45 @@
+﻿
+@model AssignmentManagementSystem.Models.SubjectActionModel
+
+@if (Model != null)
+{
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-header">
+                Delete Subject
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="actionForm">
+                <input type="hidden" name="SubjectId" value="@Model.SubjectId" />
+            </form>
+            <div class="alert alert-danger" role="alert">
+                Are you sure you want to Subject
+            </div>
+        </div>
+        <div class="modal-footer">
+
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button id="actionButton" type="button" class="btn btn-danger">Delete</button>
+        </div>
+    </div>
+}
+<script>
+    $("#actionButton").click(function () {
+        $.ajax({
+            url: '@Url.Action("Delete","Subject")',
+            type: "post",
+            data: $("#actionForm").serialize()
+        }).done(function (response) {
+            if (response.Success) {
+                location.reload();
+            } else {
+                $(".errorDiv").html(response.Message);
+            }
+        });
+    });
+</script>
+

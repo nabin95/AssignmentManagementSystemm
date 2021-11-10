@@ -1,0 +1,72 @@
+﻿@model AssignmentManagementSystem.Models.DepartmentListingModel
+
+@if (Model != null && Model.Departments != null && Model.Departments.Count() > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var department in Model.Departments)
+            {
+                <tr>
+                    <td>
+                        @department.DepartmentName
+                    </td>
+                    <td>
+                        <button data-href="@Url.Action("Create","Department", new { ID = department.DepartmentId})" type="button" class="data-btn btn btn-primary" data-toggle="modal" data-target="#actionModal">Edit</button>
+                        <button data-href="@Url.Action("Delete","Department", new { ID = department.DepartmentId})" type="button" class="data-btn btn btn-danger" data-toggle="modal" data-target="#actionModal">Delete</button>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    if (Model.Pager.EndPage > 1)
+    {
+        <nav>
+            <ul class="pagination">
+                @if (Model.Pager.CurrentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index","Department")">
+                            First
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index","Department",new { page =Model.Pager.CurrentPage - 1 })">Previous</a>
+                    </li>
+                }
+
+                @for (var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
+                {
+                    <li class="page-item @(page == Model.Pager.CurrentPage ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("Index","Department",new { page =page})">@page</a>
+                    </li>
+                }
+
+                @if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index","Department",new { page =Model.Pager.CurrentPage + 1})">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Index","Department",new { page =Model.Pager.TotalPages})">Last</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+}
+else
+{
+    <div class="alert alert-warning" role="alert">
+        Sorry! No Record exist..
+    </div>
+}
+
+

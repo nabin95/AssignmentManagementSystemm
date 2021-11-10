@@ -1,0 +1,131 @@
+﻿
+
+@model AssignmentManagementSystem.Models.AssignmentActionModel
+
+@if (Model != null)
+{
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">
+                @if (Model.AssignmentId > 0)
+                {
+                    <span>Edit Assignment</span>
+                }
+                else
+                {
+                    <span>Create Assignment</span>
+                }
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="actionForm">
+                <input type="hidden" name="AssignmentId" value="@Model.AssignmentId" />
+                <div class="form-group">
+
+                    <label>TeacherName</label>
+                    <select class="form-control" name="TeacherId">
+                        @if (Model.Teachers != null)
+                        {
+                            foreach (var teacher in Model.Teachers)
+                            {
+                                <option value="@teacher.TeacherId" @(teacher.TeacherId == Model.TeacherId ? "Selected" : string.Empty)>
+                                    @teacher.TeacherName
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+
+                    <label>StudentName</label>
+                    <select class="form-control" name="StudentId">
+                        @if (Model.Students != null)
+                        {
+                            foreach (var student in Model.Students)
+                            {
+                                <option value="@student.StudentId" @(student.StudentId == Model.StudentId ? "Selected" : string.Empty)>
+                                    @student.StudentName
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+
+                    <label>SubjectName</label>
+                    <select class="form-control" name="SubjectId">
+                        @if (Model.Subjects != null)
+                        {
+                            foreach (var subject in Model.Subjects)
+                            {
+                                <option value="@subject.SubjectId" @(subject.SubjectId == Model.SubjectId ? "Selected" : string.Empty)>
+                                    @subject.SubjectName
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+
+                    <label>AssignmentMarks</label>
+                    <select class="form-control" name="AssigmentMarksId">
+                        @if (Model.AssignmentMarks != null)
+                        {
+                            foreach (var assignmentmarks in Model.AssignmentMarks)
+                            {
+                                <option value="@assignmentmarks.AssigmentMarksId" @(assignmentmarks.AssigmentMarksId == Model.AssigmentMarksId ? "Selected" : string.Empty)>
+                                    @assignmentmarks.AssigmentMarks
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+
+                    <label>AssignmentStatus</label>
+                    <select class="form-control" name="AssigmentStatusId">
+                        @if (Model.AssignmentStatus != null)
+                        {
+                            foreach (var assignmentStatus in Model.AssignmentStatus)
+                            {
+                                <option value="@assignmentStatus.AssigmentStatusId" @(assignmentStatus.AssigmentStatusId == Model.AssigmentStatusId ? "Selected" : string.Empty)>
+                                    @assignmentStatus.AssigmentStatus
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+            </form>
+            <div class="errorDiv"></div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button id="saveAction" type="button" class="btn btn-primary">Save changes</button>
+        </div>
+    </div>
+
+}
+<script>
+    $("#saveAction").click(function () {
+        debugger;
+        $.ajax({
+            url: '@Url.Action("Create", "Assignment")',
+            type: "post",
+            data: $("#actionForm").serialize()
+        }).done(function (response) {
+            if (response.Success) {
+                location.reload();
+            } else {
+                $(".errorDiv").html(response.Message);
+            }
+
+        });
+
+    });
+</script>
+
+
+

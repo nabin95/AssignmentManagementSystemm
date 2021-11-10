@@ -1,0 +1,85 @@
+﻿
+@model AssignmentManagementSystem.Models.StudentActionModel
+
+@if (Model != null)
+{
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">
+                @if (Model.StudentId > 0)
+                {
+                    <span>Edit Student</span>
+                }
+                else
+                {
+                    <span>Create Student</span>
+                }
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="actionForm">
+                <input type="hidden" name="StudentId" value="@Model.StudentId" />
+                <div class="form-group">
+                    <label>StudentName</label>
+                    <input class="form-control" name="StudentName" placeholder="Enter Student" value="@Model.StudentName">
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <input class="form-control" name="Address" placeholder="Enter Address" value="@Model.Address">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input class="form-control" name="Email" placeholder="Email" value="@Model.Email">
+                </div>
+                <div class="form-group">
+                    <label>ContactNumber</label>
+                    <input class="form-control" name="ContactNumber" placeholder="ContactNumber" value="@Model.ContactNumber">
+                </div>
+                <div class="form-group">
+                    
+                    <label>DepartmentName</label>
+                   <select class="form-control" name="DepartmentId">
+                       @if(Model.Departments != null)
+                       {
+                           foreach(var department in Model.Departments)
+                           {
+                              <option value="@department.DepartmentId" @(department.DepartmentId == Model.DepartmentId ? "Selected" : string.Empty)>
+                                  @department.DepartmentName
+                              </option>
+                           } 
+                       }
+                   </select>
+                </div>
+            </form>
+            <div class="errorDiv"></div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button id="saveAction" type="button" class="btn btn-primary">Save changes</button>
+        </div>
+    </div>
+
+}
+<script>
+    $("#saveAction").click(function () {
+        debugger;
+        $.ajax({
+            url: '@Url.Action("Create", "Student")',
+            type: "post",
+            data: $("#actionForm").serialize()
+        }).done(function (response) {
+            if (response.Success) {
+                location.reload();
+            } else {
+                $(".errorDiv").html(response.Message);
+            }
+
+        });
+
+    });
+</script>
+
+
